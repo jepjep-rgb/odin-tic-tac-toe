@@ -1,6 +1,8 @@
 class Board
+    attr_accessor :board
+
     def initialize
-        @board = [1..9]
+        @board = (1..9).to_a
     end
 
     def update_board(position, marker)
