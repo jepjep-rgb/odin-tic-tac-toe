@@ -11,13 +11,13 @@ class Game
     while game_play
       Game.start
       Game.game_loop
-      Game.restart?(game_play)
+      game_play = Game.restart?
     end
   end
 
   private
 
-  def start
+  def self.start
     @board = Board.new
 
     puts 'Player 1, please input your name: '
@@ -42,16 +42,14 @@ class Game
 
     WINNING_COMBO.each do |win_check|
     is_win = (player.marker_positions & win_check) == win_check
-    break if is_win 
-    end
-    end
+    break if is_win
 
     puts "GAME OVER! #{player.name} win!"
 
     is_win
   end
 
-  def game_loop
+  def self.game_loop
     until end?
       @board.display_board
       puts "#{@player1.name}, please input marker position (1-9): "
@@ -68,9 +66,9 @@ class Game
     end
   end
 
-  def restart?(game_play)
+  def self.restart?
     puts 'Do you want to restart the game? (y/n)'
     input = gets.chomp until input.to_s.downcase == 'y' || input.to_s.downcase == 'n'
-    game_play = input.to_s.downcase == 'n' ? false : true
+    input.to_s.downcase == 'y'
   end
 end
