@@ -18,4 +18,8 @@ class Board
         puts " #{@board[6]} | #{@board[7]} | #{@board[8]} "
         puts " "
     end
+
+    def cell_empty?(position)
+        @board[position - 1] == position
+    end
 end
