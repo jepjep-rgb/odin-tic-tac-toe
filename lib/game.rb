@@ -38,6 +38,8 @@ class Game
             break if is_win
         end
 
+        puts "GAME OVER! #{player.name} win!"
+
         is_win
     end
 
@@ -46,9 +48,15 @@ class Game
             @board.display_board
             puts "#{@player1.name}, please input marker position (1-9): "
             position1 = gets.chomp until @board.cell_empty?(position1)
+            @player1.place_marker(position1)
+
+            break if player_win?(@player1) || end?
             
             puts "#{@player2.name}, please input marker position (1-9): "
             position2 = gets.chomp until @board.cell_empty?(position2)
+            @player2.place_marker(position2)
+
+            break if player_win?(@player2)
         end
     end
 end
