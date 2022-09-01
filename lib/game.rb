@@ -1,4 +1,11 @@
 class Game
+    def play
+        Game.start
+        Game.game_loop 
+    end
+
+    private
+    
     def start
         puts "Player 1, please input your name: "
         name1 = gets.chomp
@@ -13,5 +20,20 @@ class Game
         @player2 = Player.new(name2, marker2)
 
         @board = Board.new
+    end
+
+    def end?
+        (@board.board - Player.markers) == Player.markers
+    end
+
+    def game_loop
+        until end?
+            @board.display_board
+            puts "#{@player1.name}, please input marker position (1-9): "
+            position1 = gets.chomp until @board.cell_empty?(position1)
+            
+            puts "#{@player2.name}, please input marker position (1-9): "
+            position2 = gets.chomp until @board.cell_empty?(position2)
+        end
     end
 end
