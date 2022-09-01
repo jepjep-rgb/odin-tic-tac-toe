@@ -1,7 +1,11 @@
 class Game
     def play
-        Game.start
-        Game.game_loop 
+        game_play = true
+        while game_play
+            Game.start
+            Game.game_loop 
+            Game.restart?(game_play)
+        end
     end
 
     private
@@ -23,7 +27,7 @@ class Game
     end
 
     def end?
-        (@board.board - Player.markers) == Player.markers
+        (@board.board & Player.markers) == Player.markers
     end
 
     def player_win?(player)
@@ -34,7 +38,7 @@ class Game
         is_win = false
 
         WINNING_COMBO.each do |win_check|
-            is_win = (player.marker_positions - win_check) == win_check
+            is_win = (player.marker_positions & win_check) == win_check
             break if is_win
         end
 
@@ -58,5 +62,11 @@ class Game
 
             break if player_win?(@player2)
         end
+    end
+
+    def restart?(game_play)
+        puts "Do you want to restart the game? (y/n)"
+        input = gets.chomp until input.to_s.downcase == 'y' || input.to_s.downcase == 'n'
+        game_play = input.to_s.downcase == 'n' ? false : true
     end
 end
