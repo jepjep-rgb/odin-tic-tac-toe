@@ -38,17 +38,15 @@ class Game
 
     WINNING_COMBO.each do |win_check|
       is_win = (player.marker_positions & win_check) == win_check
+      puts "GAME OVER! #{player.name} win!" if is_win
       break if is_win
     end
-
-    puts "GAME OVER! #{player.name} win!"
-
     is_win
   end
 
   def marker_position(name)
     puts "#{name}, please input marker position (1-9): "
-    position = gets.chomp until @board.cell_empty?(position)
+    position = gets.chomp until !(position.nil?) && @board.cell_empty?(position.to_i)
   end
 
   def start
@@ -65,12 +63,12 @@ class Game
   def game_loop
     until end?
       @board.display_board
-      position1 = marker_position(@player1.name)
+      position1 = marker_position(@player1.name).to_i
       @player1.place_marker(position1)
 
       break if player_win?(@player1) || end?
 
-      position2 = marker_position(@player2.name)
+      position2 = marker_position(@player2.name).to_i
       @player2.place_marker(position2)
 
       break if player_win?(@player2)
