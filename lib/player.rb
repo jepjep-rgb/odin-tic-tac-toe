@@ -12,7 +12,7 @@ class Player
     end
   end
 
-  attr_reader :name, :marker, :marker_positions, :markers
+  attr_reader :name, :marker, :marker_positions
 
   def initialize(name, marker, board)
     @name = name
