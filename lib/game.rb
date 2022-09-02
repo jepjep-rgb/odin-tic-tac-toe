@@ -9,9 +9,9 @@ class Game
   def play
     game_play = true
     while game_play
-      Game.start
-      Game.game_loop
-      game_play = Game.restart?
+      start
+      game_loop
+      game_play = restart?
     end
   end
 
@@ -51,39 +51,36 @@ class Game
     position = gets.chomp until @board.cell_empty?(position)
   end
 
-  class << self
-    private
-
-    def start
-      @board = Board.new
-      name1 = player_name(1)
-      marker1 = player_marker(name1)
-      @player1 = Player.new(name1, marker1, @board)
+  def start
+    @board = Board.new
+    name1 = player_name(1)
+    marker1 = player_marker(name1)
+    @player1 = Player.new(name1, marker1, @board)
   
-      name2 = player_name(2)
-      marker2 = player_marker(name2, marker1)
-      @player2 = Player.new(name2, marker2, @board)
-    end
+    name2 = player_name(2)
+    marker2 = player_marker(name2, marker1)
+    @player2 = Player.new(name2, marker2, @board)
+  end
 
-    def game_loop
-      until end?
-        @board.display_board
-        position1 = marker_position(@player1.name)
-        @player1.place_marker(position1)
+  def game_loop
+    until end?
+      @board.display_board
+      position1 = marker_position(@player1.name)
+      @player1.place_marker(position1)
 
-        break if player_win?(@player1) || end?
+      break if player_win?(@player1) || end?
 
-        position2 = marker_position(@player2.name)
-        @player2.place_marker(position2)
+      position2 = marker_position(@player2.name)
+      @player2.place_marker(position2)
 
-        break if player_win?(@player2)
-      end
-    end
-
-    def restart?
-      puts 'Do you want to restart the game? (y/n)'
-      input = gets.chomp until input.to_s.downcase == 'y' || input.to_s.downcase == 'n'
-      input.to_s.downcase == 'y'
+      break if player_win?(@player2)
     end
   end
+
+  def restart?
+    puts 'Do you want to restart the game? (y/n)'
+    input = gets.chomp until input.to_s.downcase == 'y' || input.to_s.downcase == 'n'
+    input.to_s.downcase == 'y'
+  end
+  
 end
