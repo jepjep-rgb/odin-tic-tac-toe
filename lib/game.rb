@@ -19,18 +19,17 @@ class Game
 
   def player_name(num)
     puts "Player #{num}, please input your name: "
-    name = gets.chomp
-    return name
+    gets.chomp
   end
 
   def player_marker(name, other_marker = '')
     puts "#{name}, please input your marker (should only be 1 character long): "
     marker = gets.chomp until marker.to_s.length == 1 && marker.to_s != other_marker.to_s
-    return marker
+    marker
   end
 
   def end?
-    (@board.board & Player.markers) == Player.markers
+    @board.board.uniq == Player.markers
   end
 
   def player_win?(player)
@@ -46,7 +45,8 @@ class Game
 
   def marker_position(name)
     puts "#{name}, please input marker position (1-9): "
-    position = gets.chomp until !(position.nil?) && @board.cell_empty?(position.to_i)
+    position = gets.chomp until !position.nil? && @board.cell_empty?(position.to_i)
+    position
   end
 
   def start
@@ -54,7 +54,7 @@ class Game
     name1 = player_name(1)
     marker1 = player_marker(name1)
     @player1 = Player.new(name1, marker1, @board)
-  
+
     name2 = player_name(2)
     marker2 = player_marker(name2, marker1)
     @player2 = Player.new(name2, marker2, @board)
@@ -68,6 +68,7 @@ class Game
 
       break if player_win?(@player1) || end?
 
+      @board.display_board
       position2 = marker_position(@player2.name).to_i
       @player2.place_marker(position2)
 
@@ -80,5 +81,4 @@ class Game
     input = gets.chomp until input.to_s.downcase == 'y' || input.to_s.downcase == 'n'
     input.to_s.downcase == 'y'
   end
-  
 end
