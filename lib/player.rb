@@ -4,6 +4,14 @@
 class Player
   @markers = []
 
+  class << self
+    attr_accessor :markers
+
+    def list_markers(marker)
+      @markers.append(marker)
+    end
+  end
+
   attr_reader :name, :marker, :marker_positions, :markers
 
   def initialize(name, marker, board)
@@ -11,7 +19,7 @@ class Player
     @marker = marker
     @board = board
     @marker_positions = []
-    @markers << marker
+    Player.list_markers(marker)
   end
 
   def place_marker(position)
