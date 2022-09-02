@@ -17,20 +17,16 @@ class Game
 
   private
 
-  def self.start
-    @board = Board.new
+  def player_name(num)
+    puts "Player #{num}, please input your name: "
+    name = gets.chomp
+    return name
+  end
 
-    puts 'Player 1, please input your name: '
-    name1 = gets.chomp
-    puts "#{name1}, please input your marker (should only be 1 character long): "
-    marker1 = gets.chomp until marker1.to_s.length == 1
-    @player1 = Player.new(name1, marker1, @board)
-
-    puts 'Player 2, please input your name: '
-    name2 = gets.chomp
-    puts "#{name2}, please input your marker (should only be 1 character long and is not #{marker1}): "
-    marker2 = gets.chomp until marker2.to_s.length == 2 && marker2.to_s != marker1.to_s
-    @player2 = Player.new(name2, marker2, @board)
+  def player_marker(name, other_marker = '')
+    puts "#{name}, please input your marker (should only be 1 character long): "
+    marker = gets.chomp until marker.to_s.length == 1 && marker.to_s != other_marker.to_s
+    return marker
   end
 
   def end?
@@ -41,34 +37,53 @@ class Game
     is_win = false
 
     WINNING_COMBO.each do |win_check|
-    is_win = (player.marker_positions & win_check) == win_check
-    break if is_win
+      is_win = (player.marker_positions & win_check) == win_check
+      break if is_win
+    end
 
     puts "GAME OVER! #{player.name} win!"
 
     is_win
   end
 
-  def self.game_loop
-    until end?
-      @board.display_board
-      puts "#{@player1.name}, please input marker position (1-9): "
-      position1 = gets.chomp until @board.cell_empty?(position1)
-      @player1.place_marker(position1)
-
-      break if player_win?(@player1) || end?
-      
-      puts "#{@player2.name}, please input marker position (1-9): "
-      position2 = gets.chomp until @board.cell_empty?(position2)
-      @player2.place_marker(position2)
-
-      break if player_win?(@player2)
-    end
+  def marker_position(name)
+    puts "#{name}, please input marker position (1-9): "
+    position = gets.chomp until @board.cell_empty?(position)
   end
 
-  def self.restart?
-    puts 'Do you want to restart the game? (y/n)'
-    input = gets.chomp until input.to_s.downcase == 'y' || input.to_s.downcase == 'n'
-    input.to_s.downcase == 'y'
+  class << self
+    private
+
+    def start
+      @board = Board.new
+      name1 = player_name(1)
+      marker1 = player_marker(name1)
+      @player1 = Player.new(name1, marker1, @board)
+  
+      name2 = player_name(2)
+      marker2 = player_marker(name2, marker1)
+      @player2 = Player.new(name2, marker2, @board)
+    end
+
+    def game_loop
+      until end?
+        @board.display_board
+        position1 = marker_position(@player1.name)
+        @player1.place_marker(position1)
+
+        break if player_win?(@player1) || end?
+
+        position2 = marker_position(@player2.name)
+        @player2.place_marker(position2)
+
+        break if player_win?(@player2)
+      end
+    end
+
+    def restart?
+      puts 'Do you want to restart the game? (y/n)'
+      input = gets.chomp until input.to_s.downcase == 'y' || input.to_s.downcase == 'n'
+      input.to_s.downcase == 'y'
+    end
   end
 end
